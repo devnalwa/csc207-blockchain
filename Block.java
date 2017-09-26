@@ -75,6 +75,14 @@ public class Block {
     }
 
     public String toString(){
-        return "BBlock " + Integer.toString(this.num) + " (Amount: " + Integer.toString(this.amount) + ", Nonce: " + Long.toString(this.nonce) + ", prevHash: " + this.prevHash.toString() + ", hash: " + this.curHash.toString() + ")"; 
+        String str = "Block " + Integer.toString(this.num) + " (Amount: " + Integer.toString(this.amount) + ", Nonce: " + Long.toString(this.nonce);
+        if(this.prevHash != null){
+                    str += ", prevHash: " + this.prevHash.toString();
+        }
+        else {
+            str += ", prevHash: " + "null";
+        }
+        str += ", hash: " + this.curHash.toString() + ")"; 
+        return str;
     }
 }

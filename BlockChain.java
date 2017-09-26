@@ -29,21 +29,38 @@ public class BlockChain {
         return last.block.num + 1;
     }
     void append(Block blk){
-        if(blk.prevHash != last.block.curHash){
+        int p1 = this.first.block.amount;
+        int p2 = 0;
+        Node temp = this.first.next;
+        while(temp != null){
+            if(temp.block.amount > 0){
+                p1 += temp.block.amount;
+                p2 -= temp.block.amount;
+            }else if(temp.block.amount <0){
+                p1 -= temp.block.amount;
+                p2 += temp.block.amount;
+            }else{}
+            temp = temp.next;
+        }
+        if(blk.amount < 0 && p1 -blk.amount < 0){
+            throw new IllegalArgumentException("not a valid block"); 
+        }
+        if(blk.amount > 0 && p2 -blk.amount < 0){
             throw new IllegalArgumentException("not a valid block"); 
         }
         else{
+            blk.prevHash = this.last.block.curHash;
             Node add = new Node(blk, null);
             this.last.next = add; 
-
         }
     }
     public boolean removeLast(){
         if(getSize() ==1) return false;
         Node temp = this.first;
-        do{
-            temp = temp.next; 
-        }while(temp.next != null);
+        while(temp.next.next != null){
+           System.out.println("check");
+            temp = temp.next;
+        }
         temp.next = null;
         this.last = temp;
         return true;
@@ -77,7 +94,7 @@ public class BlockChain {
         int p1 = this.first.block.amount;
         int p2 = 0;
         Node temp = this.first.next;
-        do{
+        while(temp != null){
             if(temp.block.amount > 0){
                 p1 += temp.block.amount;
                 p2 -= temp.block.amount;
@@ -86,15 +103,16 @@ public class BlockChain {
                 p2 += temp.block.amount;
             }else{}
             temp = temp.next;
-        }while(temp != null);
+        }
         System.out.println("Alice: " + p1 + ", Bob: " + p2);
     }
-    public String toString(){
+    public String toString2(){
         String str = "";
         Node temp = this.first;
-        for(int i = 0; i < getSize(); i++){
+        while(temp != null){
             str += temp.block.toString();
             str += "\n";
+            temp = temp.next;
         }
         return str;
     }
